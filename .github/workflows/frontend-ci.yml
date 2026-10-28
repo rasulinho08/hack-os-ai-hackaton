@@ -1,0 +1,46 @@
+# Checks every push to the release branches and every pull request:
+# lint, types, unit tests and a production build — the same commands a
+# contributor runs locally (see README). Deploys stay with Vercel.
+name: CI frontend
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontend/**", ".github/workflows/frontend-ci.yml"]
+  pull_request:
+    paths: ["frontend/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npx eslint .
+      - name: Types
+        run: npx tsc --noEmit -p .
+      - name: Unit tests
+        run: npx vitest run
+      - name: Production build
+        run: npx next build
+        env:
+          # A production build refuses to start without it (next.config.ts).
+          NEXT_PUBLIC_API_URL: https://hackos-api.onrender.com
+          NEXT_TELEMETRY_DISABLED: "1"

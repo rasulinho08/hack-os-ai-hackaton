@@ -1,0 +1,91 @@
+# Checks every push to the release branches and every pull request: lint,
+# then the whole suite against a real API on an empty Postgres — migrations
+# from zero, the test seed, the fake mail/Telegram/GitHub servers the suite
+# expects (tests/fake*.js). Deploys stay with Render.
+name: CI backend
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/backend-ci.yml"]
+  pull_request:
+    paths: ["backend/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hackos
+          POSTGRES_PASSWORD: hackos
+          POSTGRES_DB: hackos
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hackos"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      # CI-only values: nothing here is used outside this job.
+      DATABASE_URL: postgresql://hackos:hackos@localhost:5432/hackos
+      JWT_SECRET: ci-only-jwt-secret-not-used-anywhere-else-0123456789
+      NODE_ENV: development
+      PORT: "5000"
+      API_URL: http://localhost:5000
+      FRONTEND_URL: http://localhost:3000
+      FRONTEND_URLS: http://localhost:3000,http://127.0.0.1:3000
+      GITHUB_API_BASE: http://127.0.0.1:5098
+      JOBS_INTERVAL_MS: "2000"
+      AUTO_ANNOUNCE_EVERY_MS: "2000"
+      MAIL_PROVIDER: smtp
+      SMTP_HOST: 127.0.0.1
+      SMTP_PORT: "2525"
+      SMTP_USER: ci
+      SMTP_PASS: ci
+      SMTP_SECURE: "false"
+      MAIL_FROM_EMAIL: noreply@hackos.test
+      TELEGRAM_BOT_TOKEN: "123456:ci-token"
+      TELEGRAM_API_BASE: http://127.0.0.1:5099
+      TELEGRAM_WEBHOOK_SECRET: ci-webhook-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      # pdftotext: the invoice and report tests read the PDFs' text back.
+      - name: Poppler
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+      - name: Lint
+        run: npm run lint
+      - name: Encryption key and the fake mail, Telegram and GitHub servers
+        run: |
+          echo "DATA_ENCRYPTION_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")" >> "$GITHUB_ENV"
+          node tests/fakeSmtp.js 2525 > fake-smtp.log 2>&1 &
+          node tests/fakeTelegram.js 5099 > fake-telegram.log 2>&1 &
+          node tests/fakeGithub.js 5098 > fake-github.log 2>&1 &
+      - name: Start the API (it runs the migrations)
+        run: |
+          node server.js > api.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf localhost:5000/health >/dev/null && exit 0; sleep 1; done
+          echo "API did not start"; cat api.log; exit 1
+      - name: Seed the test accounts
+        run: node scripts/seed-test-data.js
+      - name: Tests
+        run: npm test
+      - name: API log
+        if: failure()
+        run: tail -n 300 api.log
