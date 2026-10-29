@@ -1,0 +1,531 @@
+{
+ "source": "Ministry of Science and Education of the Republic of Azerbaijan, edu.gov.az (higher education institutions, four categories), read 2026-10-18",
+ "items": [
+  {
+   "id": "az-01",
+   "name": "Bakı Dövlət Universiteti",
+   "alt": [
+    "Baku State University",
+    "BDU",
+    "BSU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-02",
+   "name": "Bakı Dövlət Universitetinin Qazax filialı",
+   "alt": [
+    "Baku State University Gazakh branch",
+    "BDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-03",
+   "name": "Azərbaycan Dövlət Neft və Sənaye Universiteti",
+   "alt": [
+    "Azerbaijan State Oil and Industry University",
+    "ADNSU",
+    "ASOIU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-04",
+   "name": "ADNSU-nun nəzdində Azərbaycan-Fransız Universiteti",
+   "alt": [
+    "French-Azerbaijani University",
+    "UFAZ",
+    "AFU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-05",
+   "name": "Azərbaycan Texniki Universiteti",
+   "alt": [
+    "Azerbaijan Technical University",
+    "AzTU",
+    "ATU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-06",
+   "name": "Azərbaycan Dövlət İqtisad Universiteti",
+   "alt": [
+    "Azerbaijan State University of Economics",
+    "UNEC",
+    "ADİU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-07",
+   "name": "Azərbaycan Dövlət İqtisad Universitetinin Dərbənd filialı",
+   "alt": [
+    "UNEC Derbent branch",
+    "UNEC"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-08",
+   "name": "Azərbaycan Dövlət İqtisad Universitetinin Zaqatala filialı",
+   "alt": [
+    "UNEC Zagatala branch",
+    "UNEC"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-09",
+   "name": "Azərbaycan Dövlət Pedaqoji Universiteti",
+   "alt": [
+    "Azerbaijan State Pedagogical University",
+    "ADPU",
+    "ASPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-10",
+   "name": "Azərbaycan Dövlət Pedaqoji Universitetinin Ağcəbədi filialı",
+   "alt": [
+    "ASPU Aghjabadi branch",
+    "ADPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-11",
+   "name": "Azərbaycan Dövlət Pedaqoji Universitetinin Cəlilabad filialı",
+   "alt": [
+    "ASPU Jalilabad branch",
+    "ADPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-12",
+   "name": "Azərbaycan Dövlət Pedaqoji Universitetinin Quba filialı",
+   "alt": [
+    "ASPU Guba branch",
+    "ADPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-13",
+   "name": "Azərbaycan Dövlət Pedaqoji Universitetinin Şamaxı filialı",
+   "alt": [
+    "ASPU Shamakhi branch",
+    "ADPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-14",
+   "name": "Azərbaycan Dövlət Pedaqoji Universitetinin Şəki filialı",
+   "alt": [
+    "ASPU Shaki branch",
+    "ADPU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-15",
+   "name": "Azərbaycan Memarlıq və İnşaat Universiteti",
+   "alt": [
+    "Azerbaijan University of Architecture and Construction",
+    "AzMİU",
+    "AzUAC"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-16",
+   "name": "Bakı Slavyan Universiteti",
+   "alt": [
+    "Baku Slavic University",
+    "BSU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-17",
+   "name": "Azərbaycan Dillər Universiteti",
+   "alt": [
+    "Azerbaijan University of Languages",
+    "ADU",
+    "AUL"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-18",
+   "name": "Bakı Mühəndislik Universiteti",
+   "alt": [
+    "Baku Engineering University",
+    "BMU",
+    "BEU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-19",
+   "name": "Üzeyir Hacıbəyli adına Bakı Musiqi Akademiyası",
+   "alt": [
+    "Baku Music Academy",
+    "BMA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-20",
+   "name": "Azərbaycan Dövlət Mədəniyyət və İncəsənət Universiteti",
+   "alt": [
+    "Azerbaijan State University of Culture and Arts",
+    "ADMİU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-21",
+   "name": "Sumqayıt Dövlət Universiteti",
+   "alt": [
+    "Sumgait State University",
+    "SDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-22",
+   "name": "Lənkəran Dövlət Universiteti",
+   "alt": [
+    "Lankaran State University",
+    "LDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-23",
+   "name": "Gəncə Dövlət Universiteti",
+   "alt": [
+    "Ganja State University",
+    "GDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-24",
+   "name": "Azərbaycan Texnologiya Universiteti",
+   "alt": [
+    "Azerbaijan Technological University",
+    "ATU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-25",
+   "name": "Mingəçevir Dövlət Universiteti",
+   "alt": [
+    "Mingachevir State University",
+    "MDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-26",
+   "name": "Naxçıvan Dövlət Universiteti",
+   "alt": [
+    "Nakhchivan State University",
+    "NDU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-27",
+   "name": "Azərbaycan Dövlət Rəssamlıq Akademiyası",
+   "alt": [
+    "Azerbaijan State Academy of Fine Arts",
+    "ADRA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-28",
+   "name": "Azərbaycan Milli Konservatoriyası",
+   "alt": [
+    "Azerbaijan National Conservatory"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-29",
+   "name": "Naxçıvan Müəllimlər İnstitutu",
+   "alt": [
+    "Nakhchivan Teachers Institute"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-30",
+   "name": "Qarabağ Universiteti",
+   "alt": [
+    "Karabakh University"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-31",
+   "name": "Türkiyə-Azərbaycan Universiteti",
+   "alt": [
+    "Turkish-Azerbaijani University",
+    "TAU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-32",
+   "name": "Azərbaycan Tibb Universiteti",
+   "alt": [
+    "Azerbaijan Medical University",
+    "ATU",
+    "AMU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-33",
+   "name": "Azərbaycan İdman Akademiyası",
+   "alt": [
+    "Azerbaijan Sport Academy"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-34",
+   "name": "Azərbaycan Dövlət Aqrar Universiteti",
+   "alt": [
+    "Azerbaijan State Agrarian University",
+    "ADAU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-35",
+   "name": "Azərbaycan Respublikası Prezidenti Yanında Dövlət İdarəçilik Akademiyası",
+   "alt": [
+    "Academy of Public Administration under the President of the Republic of Azerbaijan",
+    "DİA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-36",
+   "name": "Azərbaycan Dövlət Dəniz Akademiyası",
+   "alt": [
+    "Azerbaijan State Marine Academy",
+    "ADDA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-37",
+   "name": "Milli Aviasiya Akademiyası",
+   "alt": [
+    "National Aviation Academy",
+    "MAA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-38",
+   "name": "“ADA” Universiteti",
+   "alt": [
+    "ADA University",
+    "ADA"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-39",
+   "name": "Bakı Ali Neft Məktəbi",
+   "alt": [
+    "Baku Higher Oil School",
+    "BANM",
+    "BHOS"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-40",
+   "name": "Azərbaycan Turizm və Menecment Universiteti",
+   "alt": [
+    "Azerbaijan Tourism and Management University",
+    "ATMU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-41",
+   "name": "M.V.Lomonosov adına Moskva Dövlət Universitetinin Bakı filialı",
+   "alt": [
+    "Lomonosov Moscow State University Baku branch",
+    "MDU",
+    "MSU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-42",
+   "name": "İ.M Seçenov adına Birinci Moskva Dövlət Tibb Universitetinin Bakı filialı",
+   "alt": [
+    "Sechenov University Baku branch"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-43",
+   "name": "Bakı Xoreoqrafiya Akademiyası",
+   "alt": [
+    "Baku Choreography Academy"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-44",
+   "name": "Azərbaycan İlahiyyat İnstitutu",
+   "alt": [
+    "Azerbaijan Institute of Theology"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-45",
+   "name": "Qərbi Kaspi Universiteti",
+   "alt": [
+    "Western Caspian University",
+    "QKU",
+    "WCU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-46",
+   "name": "Azərbaycan Universiteti",
+   "alt": [
+    "Azerbaijan University"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-47",
+   "name": "Xəzər Universiteti",
+   "alt": [
+    "Khazar University"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-48",
+   "name": "“Odlar Yurdu” Universiteti",
+   "alt": [
+    "Odlar Yurdu University",
+    "OYU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-49",
+   "name": "Bakı Avrasiya Universiteti",
+   "alt": [
+    "Baku Eurasian University"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-50",
+   "name": "Azərbaycan Kooperasiya Universiteti",
+   "alt": [
+    "Azerbaijan Cooperation University",
+    "AKU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-51",
+   "name": "Bakı Biznes Universiteti",
+   "alt": [
+    "Baku Business University",
+    "BBU"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-52",
+   "name": "Azərbaycan Əmək və Sosial Münasibətlər Akademiyası",
+   "alt": [
+    "Azerbaijan Academy of Labour and Social Relations"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-53",
+   "name": "Heydər Əliyev adına Azərbaycan Ali Hərbi Məktəbi",
+   "alt": [
+    "Azerbaijan Higher Military School"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-54",
+   "name": "Azərbaycan Respublikasının Dövlət Təhlükəsizliyi Xidmətinin Heydər Əliyev adına Akademiyası",
+   "alt": [
+    "Academy of the State Security Service"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-55",
+   "name": "Daxili İşlər Nazirliyinin Polis Akademiyası",
+   "alt": [
+    "Police Academy of the Ministry of Internal Affairs"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-56",
+   "name": "Azərbaycan Respublikası DİN Daxili Qoşunlarının Ali Hərbi Məktəbi",
+   "alt": [
+    "Higher Military School of the Internal Troops"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-57",
+   "name": "Azərbaycan Respublikası Dövlət Sərhəd Xidməti Akademiyası",
+   "alt": [
+    "State Border Service Academy"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-58",
+   "name": "Fövqəladə Hallar Nazirliyinin Akademiyası",
+   "alt": [
+    "Academy of the Ministry of Emergency Situations"
+   ],
+   "country": "AZ"
+  },
+  {
+   "id": "az-59",
+   "name": "Azərbaycan Respublikası Dövlət Gömrük Komitəsinin Akademiyası",
+   "alt": [
+    "State Customs Committee Academy"
+   ],
+   "country": "AZ"
+  }
+ ]
+}
