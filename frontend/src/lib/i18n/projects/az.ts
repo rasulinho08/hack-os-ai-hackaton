@@ -1,0 +1,86 @@
+/* Tədbirin açıq layihələr səhifəsi, təşkilatçının açarı və komanda liderinin seçimi — Azərbaycanca. */
+import type { TranslationMap } from "../types";
+
+const az: TranslationMap = {
+  /* Açıq səhifə */
+  "pj.eyebrow": "Layihələr",
+  "pj.meta_title": "Layihələr · {event}",
+  "pj.meta_description": "{event}: komandaların hazırladığı layihələr, əvvəlcə qaliblər.",
+  "pj.lead": "Komandaların hazırladığı layihələr — əvvəlcə qaliblər.",
+  "pj.event_page": "Tədbir səhifəsi",
+  "pj.count": "Layihələr: {n}",
+  "pj.results_at": "Nəticələr elan olunub: {date}",
+  "pj.places_winners": "Yerlər mükafat qazananlar üçün göstərilir.",
+  "pj.winners": "Qaliblər",
+  "pj.all": "Bütün layihələr",
+  "pj.filter": "Track üzrə filtr",
+  "pj.filter_all": "Bütün track-lar",
+  "pj.place": "{place} yer",
+  "pj.team": "Komanda: {team}",
+  "pj.built_with": "Texnologiyalar",
+  "pj.link.repo": "Kod",
+  "pj.link.demo": "Demo",
+  "pj.link.video": "Video",
+  "pj.new_tab": "yeni vərəqdə açılır",
+  "pj.empty_title": "Göstəriləcək layihə yoxdur",
+  "pj.empty_body": "Bu səhifədə komandaların heç bir layihəsi yoxdur.",
+  "pj.filter_empty": "Bu track-da layihə yoxdur.",
+  "pj.show_all": "Bütün track-ları göstər",
+  "pj.ep_cta": "Layihələrə bax",
+
+  /* Səhifə açıq olmayanda */
+  "pj.closed_title": "Bu tədbirin açıq layihələr səhifəsi yoxdur",
+  "pj.closed_body": "Təşkilatçılar nəticələr elan olunandan sonra layihələri burada göstərə bilərlər. Qalan hər şey tədbirin səhifəsindədir.",
+  "pj.closed_cta": "Tədbir səhifəsinə keç",
+  "pj.closed_home": "HackOS ana səhifə",
+
+  /* Təşkilatçının açarı (nəticələr) */
+  "pj.org.title": "Açıq layihələr səhifəsi",
+  "pj.org.hint": "Nəticələr elan olunandan sonra komandaların layihələrini hər kəsin aça biləcəyi səhifədə göstərin: ad, təsvir, texnologiyalar və linklər, əvvəlcə qaliblər. İnsanların adları və ballar heç vaxt göstərilmir.",
+  "pj.org.toggle": "Layihələri hamıya göstər",
+  "pj.org.toggle_help": "Komanda liderləri öz layihələrini «Layihəni təqdim et» səhifəsindən gizlədə bilərlər.",
+  "pj.org.state.live": "Açıqdır",
+  "pj.org.state.waiting": "Nəticələr gözlənilir",
+  "pj.org.state.off": "Bağlıdır",
+  "pj.org.waiting_results": "Səhifə nəticələri elan edəndə açılacaq.",
+  "pj.org.waiting_event": "Tədbir səhifəsi dərc olunmayıb, ona görə layihələr səhifəsi açıla bilməz.",
+  "pj.org.since": "{when} tarixindən açıqdır",
+  "pj.org.listed": "Göstərilir",
+  "pj.org.hidden": "Komandası gizlədib",
+  "pj.org.eliminated": "Eleme olunub, göstərilmir",
+  "pj.org.places_note": "Yerlər elan olunmuş nəticələrə uyğundur: nəticələr tam açıqdırsa bütün yerlər, əks halda yalnız mükafat qazananların yerləri.",
+  "pj.org.open": "Səhifəni aç",
+  "pj.org.copy": "Linki kopyala",
+  "pj.org.copied": "Link kopyalandı",
+  "pj.org.copy_failed": "Linki kopyalamaq alınmadı",
+  "pj.org.on": "Layihələr səhifəsi açıldı",
+  "pj.org.on_waiting": "Layihələr səhifəsi nəticələrlə birlikdə açılacaq",
+  "pj.org.off": "Layihələr səhifəsi bağlandı",
+
+  /* Komanda liderinin seçimi (təqdimat səhifəsi) */
+  "pj.mine.title": "Açıq layihələr səhifəsi",
+  "pj.mine.body": "Təşkilatçılar nəticələrdən sonra tədbirin layihələr səhifəsini açsalar, layihəniz orada göstəriləcək: adı, təsviri, texnologiyaları və linkləri. Adlarınız göstərilmir.",
+  "pj.mine.toggle": "Layihəmizi səhifədə göstər",
+  "pj.mine.lead_only": "Layihənin göstərilib-göstərilməməsini komanda lideriniz həll edir.",
+  "pj.mine.shown": "Səhifədə göstərilir",
+  "pj.mine.hidden": "Səhifədə göstərilmir",
+  "pj.mine.not_open": "Səhifə hazırda açıq deyil.",
+  "pj.mine.see": "Layihələr səhifəsinə bax",
+  "pj.mine.eliminated": "Eleme olunmuş komandaların layihələri göstərilmir.",
+  "pj.mine.on": "Layihəniz açıq səhifədədir",
+  "pj.mine.off": "Layihəniz açıq səhifədə göstərilmir",
+
+  /* Xətalar */
+  "pj.load_failed": "Layihələr səhifəsinin ayarları yüklənmədi.",
+  "pj.retry": "Yenidən cəhd et",
+  "pj.err.EVENT_ARCHIVED": "Tədbir arxivdədir, bunu artıq dəyişmək olmaz.",
+  "pj.err.NOT_TEAM_LEAD": "Layihənin göstərilməsini yalnız komanda lideri həll edir.",
+  "pj.err.NO_TEAM": "Bu tədbirdə komandanız yoxdur.",
+  "pj.err.VALIDATION_ERROR": "Alınmadı. Səhifəni yeniləyib yenidən cəhd edin.",
+  "pj.err.FORBIDDEN": "Bunu dəyişə bilməzsiniz.",
+  "pj.err.NOT_FOUND": "Tədbir tapılmadı.",
+  "pj.err.RATE_LIMITED": "Çox cəhd oldu. Bir dəqiqə gözləyib yenidən cəhd edin.",
+  "pj.err.generic": "Alınmadı. Yenidən cəhd edin.",
+};
+
+export default az;

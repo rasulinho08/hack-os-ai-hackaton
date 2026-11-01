@@ -1,0 +1,86 @@
+/* An event's public projects page, the organiser's switch for it and the team lead's choice — English, the source for these keys. */
+import type { TranslationMap } from "../types";
+
+const en: TranslationMap = {
+  /* The public page */
+  "pj.eyebrow": "Projects",
+  "pj.meta_title": "Projects · {event}",
+  "pj.meta_description": "What the teams built at {event}, with the winners first.",
+  "pj.lead": "What the teams built, with the winners first.",
+  "pj.event_page": "Event page",
+  "pj.count": "Projects: {n}",
+  "pj.results_at": "Results announced {date}",
+  "pj.places_winners": "Places are shown for the prize winners.",
+  "pj.winners": "Winners",
+  "pj.all": "All projects",
+  "pj.filter": "Filter by track",
+  "pj.filter_all": "All tracks",
+  "pj.place": "{place} place",
+  "pj.team": "by {team}",
+  "pj.built_with": "Built with",
+  "pj.link.repo": "Code",
+  "pj.link.demo": "Demo",
+  "pj.link.video": "Video",
+  "pj.new_tab": "opens in a new tab",
+  "pj.empty_title": "No projects to show",
+  "pj.empty_body": "None of the teams' projects is on this page.",
+  "pj.filter_empty": "No projects in this track.",
+  "pj.show_all": "Show all tracks",
+  "pj.ep_cta": "See the projects",
+
+  /* The page when it is not open */
+  "pj.closed_title": "This event has no public projects page",
+  "pj.closed_body": "The organisers can show the projects here once the results are announced. Everything else is on the event's page.",
+  "pj.closed_cta": "Go to the event page",
+  "pj.closed_home": "HackOS home",
+
+  /* The organiser's switch (results) */
+  "pj.org.title": "Public projects page",
+  "pj.org.hint": "Once the results are published, show the teams' projects on a page anyone can open: title, description, tech stack and links, the winners first. People's names and scores are never shown.",
+  "pj.org.toggle": "Show the projects publicly",
+  "pj.org.toggle_help": "Team leads can keep their project off the page from their submission page.",
+  "pj.org.state.live": "Open",
+  "pj.org.state.waiting": "Waiting for the results",
+  "pj.org.state.off": "Closed",
+  "pj.org.waiting_results": "The page opens when you publish the results.",
+  "pj.org.waiting_event": "The event page is not published, so the projects page cannot open.",
+  "pj.org.since": "Open since {when}",
+  "pj.org.listed": "Shown",
+  "pj.org.hidden": "Kept off by their team",
+  "pj.org.eliminated": "Eliminated, not shown",
+  "pj.org.places_note": "Places follow the published results: every place when they are fully public, otherwise only the prize winners'.",
+  "pj.org.open": "Open the page",
+  "pj.org.copy": "Copy the link",
+  "pj.org.copied": "Link copied",
+  "pj.org.copy_failed": "The link could not be copied",
+  "pj.org.on": "The projects page is open",
+  "pj.org.on_waiting": "The projects page opens with the results",
+  "pj.org.off": "The projects page is closed",
+
+  /* The team lead's choice (submission page) */
+  "pj.mine.title": "The public projects page",
+  "pj.mine.body": "If the organisers open the event's projects page after the results, your project is shown there: its title, description, tech stack and links. Your names are not.",
+  "pj.mine.toggle": "Show our project on the page",
+  "pj.mine.lead_only": "Your team lead decides whether it is shown.",
+  "pj.mine.shown": "Shown on the page",
+  "pj.mine.hidden": "Kept off the page",
+  "pj.mine.not_open": "The page is not open at the moment.",
+  "pj.mine.see": "See the projects page",
+  "pj.mine.eliminated": "Projects of eliminated teams are not shown.",
+  "pj.mine.on": "Your project is on the public page",
+  "pj.mine.off": "Your project is kept off the public page",
+
+  /* Failures */
+  "pj.load_failed": "The projects page settings did not load.",
+  "pj.retry": "Try again",
+  "pj.err.EVENT_ARCHIVED": "The event is archived, so this can no longer change.",
+  "pj.err.NOT_TEAM_LEAD": "Only the team lead decides whether the project is shown.",
+  "pj.err.NO_TEAM": "You are not in a team in this event.",
+  "pj.err.VALIDATION_ERROR": "That did not go through. Refresh the page and try again.",
+  "pj.err.FORBIDDEN": "You cannot change this.",
+  "pj.err.NOT_FOUND": "The event was not found.",
+  "pj.err.RATE_LIMITED": "Too many attempts. Wait a minute and try again.",
+  "pj.err.generic": "That did not work. Try again.",
+};
+
+export default en;
