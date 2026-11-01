@@ -1,0 +1,1723 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #111111;
+  --color-foreground: #ffffff;
+  --color-card: #1f1f1f;
+  --color-card-hover: #2a2a2a;
+  --color-muted: #b3b3b3;
+  --color-brand: #e1003c;
+  --color-brand-hover: #c00035;
+  --color-success: #00c853;
+  --color-warning: #ffc107;
+  --color-danger: #ff3b30;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Scrollbar ────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #111111; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* ── Theme variables ───────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  --hh-bg-page: #111111;
+  --hh-bg-card: #1f1f1f;
+  --hh-bg-sidebar: #151515;
+  --hh-text: #ffffff;
+  --hh-text-muted: #b3b3b3;
+  --hh-border: rgba(255,255,255,0.05);
+  --hh-input-bg: rgba(255,255,255,0.03);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   App surfaces, as tokens.
+   ──────────────────────────────────────────────────────────────────
+   Light mode was half-broken because the console paints itself two
+   different ways: Tailwind classes carrying literal hexes, which the
+   `html.light` overrides below could chase, and hand-written `.hh-*`
+   classes in this file, which they could not — every card and hero on
+   the dashboard stayed dark with dark text on it.
+
+   Chasing literals with !important is a race that is never won, so the
+   surfaces are named here once and each theme gives them a value. The
+   status colours change too: #00C853 and #FFC107 are legible on black
+   and unreadable on white, so the light theme uses darker steps that
+   clear 4.5:1 rather than the same colour at a different opacity.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --app-card-a:     #1F1F1F;
+  --app-card-b:     #181818;
+  --app-card-line:  rgba(255, 255, 255, 0.06);
+  --app-card-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  --app-hero-a:     #1C1C1C;
+  --app-hero-b:     #141414;
+
+  --app-surface:    #1F1F1F;
+  --app-surface-2:  #141414;
+  --app-muted:      #B3B3B3;
+  --app-muted-2:    #8A8A8A;
+
+  --app-ok:         #00C853;
+  --app-warn:       #FFC107;
+  --app-danger:     #FF6B6B;
+  --app-violet:     #A78BFA;
+  --app-sky:        #0EA5E9;
+  --app-orange:     #FF6B35;
+  /* Big figures on a card. White on black, near-black on white. */
+  --app-heading:    #FFFFFF;
+  --app-brand-text: #E1003C;
+}
+
+html.light {
+  --app-card-a:     #FFFFFF;
+  --app-card-b:     #F7F7F9;
+  --app-card-line:  rgba(20, 22, 28, 0.10);
+  --app-card-shadow: 0 6px 20px rgba(20, 22, 28, 0.08);
+  --app-hero-a:     #FFFFFF;
+  --app-hero-b:     #F4F4F7;
+
+  --app-surface:    #FFFFFF;
+  --app-surface-2:  #F4F4F7;
+  --app-muted:      #4B5563;
+  --app-muted-2:    #5B6270;
+
+  --app-ok:         #0C6A3E;
+  --app-warn:       #7A4E00;
+  --app-danger:     #B42318;
+  --app-violet:     #6D28D9;
+  --app-sky:        #0369A1;
+  --app-orange:     #C2410C;
+  --app-heading:    #14161C;
+  --app-brand-text: #C00035;
+
+  --hh-bg-page: #f5f5f5;
+  --hh-bg-card: #ffffff;
+  --hh-bg-sidebar: #fafafa;
+  --hh-text: #1a1a1a;
+  --hh-text-muted: #666666;
+  --hh-border: rgba(0,0,0,0.1);
+  --hh-input-bg: rgba(0,0,0,0.04);
+}
+
+/* ── Base ─────────────────────────────────────── */
+html, body {
+  /* Stop a single oversize element from breaking the whole layout on
+     phones. Anything wider than the viewport now scrolls inside its
+     own container instead of dragging the page sideways.
+     `clip` cuts the overflow without making html/body a scroll
+     container: `hidden` did, and that broke every `position: sticky`
+     in the app (sticky sticks to its nearest scroll container, which
+     was body, which never scrolls). Browsers without `clip` keep the
+     old `hidden` (the @supports rule below: a plain duplicate
+     declaration is merged away by the CSS minifier). */
+  overflow-x: clip;
+  /* Honor iPhone notch / Android gesture bar via env(safe-area-inset-*). */
+  -webkit-text-size-adjust: 100%;
+}
+@supports not (overflow-x: clip) {
+  html, body { overflow-x: hidden; }
+}
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--hh-bg-page);
+  color: var(--hh-text);
+  /* Eat the grey iOS Safari tap flash */
+  -webkit-tap-highlight-color: transparent;
+  /* Avoid mobile Safari's auto font-bumping in landscape */
+  text-size-adjust: 100%;
+}
+
+/* Make every <img> / <video> default-fluid so a hard width on a single
+   element doesn't push the layout past the viewport on a phone. */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Inputs on iOS Safari zoom in if font-size < 16px. We use 13/14px in
+   most forms — restore 16px on tiny screens so focus stops zooming. */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Theme utility classes for components */
+.theme-bg-page { background-color: var(--hh-bg-page) !important; }
+.theme-bg-card { background-color: var(--hh-bg-card) !important; }
+.theme-bg-sidebar { background-color: var(--hh-bg-sidebar) !important; }
+.theme-text { color: var(--hh-text) !important; }
+.theme-text-muted { color: var(--hh-text-muted) !important; }
+.theme-border { border-color: var(--hh-border) !important; }
+
+/* Native <select> / <option>: Windows + Chrome often paint the listbox white; force readable dark theme */
+select.hh-native-select,
+html:not(.light) select {
+  color-scheme: dark;
+}
+select.hh-native-select option,
+html:not(.light) select option {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+html.light select.hh-native-select,
+html.light select {
+  color-scheme: light;
+}
+html.light select.hh-native-select option,
+html.light select option {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+/* Light mode: override hardcoded dark colors in page content */
+html.light [class*="bg-[#1F1F1F]"] { background-color: #ffffff !important; }
+html.light [class*="bg-[#151515]"] { background-color: #fafafa !important; }
+html.light [class*="bg-[#111111]"] { background-color: #f5f5f5 !important; }
+html.light [class*="text-[#b3b3b3]"] { color: #666666 !important; }
+html.light [class*="text-[#7a7a7a]"] { color: #888888 !important; }
+html.light [class*="placeholder:text-[#7a7a7a]"]::placeholder { color: #999999 !important; }
+html.light [class*="placeholder-[#7a7a7a]"]::placeholder { color: #999999 !important; }
+html.light [class*="border-white/5"] { border-color: rgba(0,0,0,0.1) !important; }
+html.light [class*="border-white/10"] { border-color: rgba(0,0,0,0.12) !important; }
+html.light [class*="border-white/15"] { border-color: rgba(0,0,0,0.14) !important; }
+html.light [class*="border-white/20"] { border-color: rgba(0,0,0,0.16) !important; }
+/* Fix white text in light mode (default to dark) */
+html.light .text-white,
+html.light [class*="text-white/"] { color: #1a1a1a !important; }
+/*
+ * Keep white labels only on the SAME node as a solid brand fill, or inside
+ * true gradients — NOT on pastel /5 /10 panels (those class strings still
+ * contain e.g. bg-[#FFC107] and used to re-whiten all nested .text-white).
+ */
+html.light [class*="bg-[#E1003C]"].text-white,
+html.light [class*="bg-[#C00035]"].text-white,
+html.light [class*="bg-[#8B5CF6]"].text-white,
+html.light [class*="bg-[#7C3AED]"].text-white,
+html.light [class*="bg-[#00C853]"].text-white,
+html.light [class*="bg-[#FFC107]"].text-white,
+html.light [class*="bg-[#FF3B30]"].text-white,
+html.light [class*="bg-[#FF6B35]"].text-white,
+html.light [class*="bg-gradient"].text-white,
+html.light [class*="bg-gradient"] .text-white,
+html.light [class*="bg-gradient"] [class*="text-white/"],
+/*
+ * White only where the fill is solid.
+ *
+ * This used to match any button whose class contained `bg-[#`, which caught
+ * the tinted ones too — `bg-[#00C853]/10` is a ten-per-cent wash, and white
+ * text on it over a white card is 1.2:1. Every Approve and Reject button on
+ * the participants screen was invisible in light mode because of this one
+ * selector. The exclusions keep it off anything carrying an opacity suffix.
+ */
+html.light button[class*="bg-[#E1003C]"]:not([class*="bg-[#E1003C]/"]),
+html.light button[class*="bg-[#C00035]"]:not([class*="bg-[#C00035]/"]),
+html.light button[class*="bg-[#00C853]"]:not([class*="bg-[#00C853]/"]),
+html.light button[class*="bg-[#FF3B30]"]:not([class*="bg-[#FF3B30]/"]) { color: #ffffff !important; }
+/* Solid filled badges (no / opacity suffix in arbitrary hex bg) — purple count chips, etc. */
+html.light span[class*="bg-[#8B5CF6]"]:not([class*="/"])[class*="text-white"],
+html.light span[class*="bg-[#7C3AED]"]:not([class*="/"])[class*="text-white"] {
+  color: #ffffff !important;
+}
+/* Info banners: light text on pale blue was unreadable in light mode */
+html.light [class*="bg-sky-500/10"],
+html.light [class*="bg-sky-500/15"] {
+  color: #075985 !important;
+}
+/* Table headers inherit muted greys — push a bit darker on white cards */
+html.light table thead,
+html.light table thead th {
+  color: #3d3d3d !important;
+}
+/* Convert faint white-tinted surfaces to faint black-tinted in light mode */
+html.light [class*="bg-white/[0.02]"]:not(button):not(a),
+html.light [class*="bg-white/[0.03]"]:not(button):not(a),
+html.light [class*="bg-white/[0.04]"]:not(button):not(a),
+html.light [class*="bg-white/[0.05]"]:not(button):not(a),
+html.light [class*="bg-white/[0.06]"]:not(button):not(a) { background-color: rgba(0,0,0,0.04) !important; }
+
+/*
+ * Surfaces that pinned themselves dark regardless of theme.
+ *
+ * The auth screens (login, forgot/reset) used the fixed `bg-background`
+ * token and a dark `.glass` card, so in light mode the global rule that turns
+ * `.text-white` dark painted their headings black on black — the first thing
+ * a light-mode user saw after signing out was an unreadable sign-in form.
+ * The judge dashboard drew its cards in literal near-blacks (#161616 and a
+ * #181818→#121212 gradient) that nothing above mapped.
+ */
+html.light .bg-background { background-color: var(--hh-bg-page) !important; }
+html.light .glass {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(20, 22, 28, 0.10);
+}
+html.light [class*="bg-[#161616]"],
+html.light [class*="bg-[#181818]"],
+html.light [class*="bg-[#141414]"] { background-color: #ffffff !important; }
+html.light [class*="from-[#181818]"],
+html.light [class*="from-[#1a1a1a]"],
+html.light [class*="from-[#1c1c1c]"],
+html.light [class*="from-[#161616]"] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+
+/* ── Remove default link styles ───────────────── */
+/* In the base layer, so a link's own text-* / underline classes still apply
+   (an unlayered rule here used to override every one of them). */
+@layer base {
+  a { color: inherit; text-decoration: none; }
+}
+
+/* ── Utility classes ──────────────────────────── */
+.glass {
+  background: rgba(31, 31, 31, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glow-red {
+  box-shadow: 0 0 20px rgba(225, 0, 60, 0.35),
+              0 0 60px rgba(225, 0, 60, 0.1);
+}
+
+.card-shadow {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.card-shadow:hover {
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.45);
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+/* Fade-in (subtle) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+/* Mobile sidebar backdrop */
+.hh-shell-overlay-in {
+  animation: fadeIn 0.22s ease-out both;
+}
+
+/* Slide-in from left / right (nav hints, small UI) */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in {
+  animation: slideInLeft 0.4s ease-out both;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right {
+  animation: slideInRight 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Admin shell: main content enters on route / event change */
+@keyframes hhPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.hh-page-enter {
+  animation: hhPageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Dashboard sections — alternating horizontal enter */
+@keyframes hhDashFromLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes hhDashFromRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.hh-dash-from-left {
+  animation: hhDashFromLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hh-dash-from-right {
+  animation: hhDashFromRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(225, 0, 60, 0.35); }
+  50%      { box-shadow: 0 0 24px rgba(225, 0, 60, 0.35); }
+}
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Counter tick */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-count {
+  animation: countUp 0.6s ease-out both;
+}
+
+/* Stagger delays for list items */
+.animate-stagger-1 { animation-delay: 0.05s; }
+.animate-stagger-2 { animation-delay: 0.1s; }
+.animate-stagger-3 { animation-delay: 0.15s; }
+.animate-stagger-4 { animation-delay: 0.2s; }
+.animate-stagger-5 { animation-delay: 0.25s; }
+.animate-stagger-6 { animation-delay: 0.3s; }
+
+/* Smooth transitions for interactive elements */
+.transition-smooth {
+  transition: all 0.2s ease;
+}
+.transition-smooth-slow {
+  transition: all 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Table row hover */
+tr.animate-row {
+  transition: background-color 0.15s ease;
+}
+
+/* brand mark loader — float, sway, subtle tilt (figure-eight feel) */
+@keyframes brand-loader-motion {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  15% {
+    transform: translate(12px, -16px) rotate(10deg) scale(1.04);
+  }
+  35% {
+    transform: translate(16px, 4px) rotate(-4deg) scale(1);
+  }
+  55% {
+    transform: translate(0, 14px) rotate(-10deg) scale(1.03);
+  }
+  75% {
+    transform: translate(-16px, 4px) rotate(6deg) scale(1);
+  }
+  90% {
+    transform: translate(-10px, -12px) rotate(-6deg) scale(1.04);
+  }
+}
+.animate-brand-loader {
+  animation: brand-loader-motion 3.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes brand-loader-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+.animate-brand-loader-glow {
+  animation: brand-loader-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 2.8s linear infinite;
+}
+
+/* ══════════════════════════════════════════════════
+   Analytics dashboard only (.analytics-dash on page root)
+   ══════════════════════════════════════════════════ */
+@keyframes analytics-hero-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.08) translate(2%, -3%);
+  }
+}
+
+@keyframes analytics-hero-breathe-delayed {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1.05) translate(-2%, 2%);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1) translate(3%, 0);
+  }
+}
+
+@keyframes analytics-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.45);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.92);
+    box-shadow: 0 0 0 6px rgba(0, 200, 83, 0);
+  }
+}
+
+@keyframes analytics-rail-shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes analytics-chart-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes analytics-empty-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.analytics-dash .analytics-hero-blob {
+  animation: analytics-hero-breathe 7s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.analytics-dash .analytics-hero-blob--alt {
+  animation: analytics-hero-breathe-delayed 9s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.analytics-dash .analytics-live-dot {
+  animation: analytics-live-pulse 1.8s ease-in-out infinite;
+}
+
+.analytics-dash .analytics-top-rail {
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(225, 0, 60, 0.15),
+    rgba(255, 193, 7, 0.2),
+    rgba(225, 0, 60, 0.15)
+  );
+}
+.analytics-dash .analytics-top-rail::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 35%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: analytics-rail-shine 2.8s ease-in-out infinite;
+}
+
+.analytics-dash .analytics-stat-slot {
+  animation: fadeInUp 0.55s ease-out both;
+}
+.analytics-dash .analytics-stat-slot:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(4) {
+  animation-delay: 0.14s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(5) {
+  animation-delay: 0.18s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(6) {
+  animation-delay: 0.22s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(7) {
+  animation-delay: 0.26s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(8) {
+  animation-delay: 0.3s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(9) {
+  animation-delay: 0.34s;
+}
+.analytics-dash .analytics-stat-slot:nth-child(10) {
+  animation-delay: 0.38s;
+}
+
+.analytics-dash .analytics-stat-card-inner {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease, box-shadow 0.35s ease;
+}
+.analytics-dash .analytics-stat-slot:hover .analytics-stat-card-inner {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.analytics-dash .analytics-chart-card {
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease-out both;
+  transition: border-color 0.3s ease, box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.analytics-dash .analytics-chart-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    rgba(225, 0, 60, 0) 40%,
+    rgba(225, 0, 60, 0.25) 50%,
+    rgba(255, 193, 7, 0) 60%
+  );
+  background-size: 220% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.analytics-dash .analytics-chart-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(225, 0, 60, 0.22);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(225, 0, 60, 0.08);
+}
+.analytics-dash .analytics-chart-card:hover::before {
+  opacity: 1;
+  animation: analytics-chart-shimmer 2.8s ease-in-out infinite;
+}
+
+.analytics-dash .analytics-chart-empty-icon {
+  animation: analytics-empty-float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .analytics-dash .analytics-hero-blob,
+  .analytics-dash .analytics-hero-blob--alt,
+  .analytics-dash .analytics-live-dot,
+  .analytics-dash .analytics-top-rail::after,
+  .analytics-dash .analytics-chart-card::before,
+  .analytics-dash .analytics-chart-empty-icon {
+    animation: none !important;
+  }
+  .analytics-dash .analytics-stat-slot,
+  .analytics-dash .analytics-chart-card {
+    animation: none !important;
+  }
+  .analytics-dash .analytics-stat-card-inner,
+  .analytics-dash .analytics-chart-card {
+    transition: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   Admin dashboard home (stat cards + hero)
+   ══════════════════════════════════════════════════ */
+
+.hh-stat-card {
+  position: relative;
+  overflow: hidden;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--app-card-line);
+  background: linear-gradient(160deg, var(--app-card-a) 0%, var(--app-card-b) 100%);
+  box-shadow: var(--app-card-shadow);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease, box-shadow 0.35s ease;
+  animation: fadeInUp 0.5s ease-out both;
+  will-change: transform;
+}
+.hh-stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    var(--accent, #e1003c) 0%,
+    transparent 35%,
+    transparent 65%,
+    var(--accent, #e1003c) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.hh-stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5),
+    0 0 0 1px color-mix(in srgb, var(--accent, #e1003c) 20%, transparent);
+}
+.hh-stat-card:hover::before {
+  opacity: 1;
+  animation: hh-stat-card-shimmer 3.4s ease-in-out infinite;
+}
+
+.hh-stat-orb {
+  position: absolute;
+  top: -40%;
+  right: -25%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent, #e1003c) 32%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(28px);
+  opacity: 0.65;
+  pointer-events: none;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  animation: hh-stat-orb-float 8s ease-in-out infinite;
+}
+.hh-stat-card:hover .hh-stat-orb {
+  transform: translate(-15%, 15%) scale(1.15);
+  opacity: 0.95;
+}
+
+.hh-stat-shine {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hh-stat-card:hover .hh-stat-shine {
+  left: 130%;
+}
+
+.hh-stat-bar {
+  transform-origin: left;
+  animation: hh-stat-bar-grow 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes hh-stat-card-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@keyframes hh-stat-orb-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-6%, 8%) scale(1.06);
+  }
+}
+@keyframes hh-stat-bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Hero header on dashboard home */
+.hh-dashboard-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--app-card-line);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(225, 0, 60, 0.18) 0%, transparent 55%),
+    radial-gradient(120% 120% at 100% 100%, rgba(139, 92, 246, 0.16) 0%, transparent 55%),
+    linear-gradient(140deg, var(--app-hero-a) 0%, var(--app-hero-b) 100%);
+  padding: 1.5rem;
+}
+.hh-dashboard-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(225, 0, 60, 0.08),
+    transparent 40%
+  );
+  pointer-events: none;
+  transition: background 0.2s ease;
+}
+.hh-dashboard-hero-blob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.6;
+  animation: hh-dashboard-blob-float 12s ease-in-out infinite;
+}
+.hh-dashboard-hero-blob.one {
+  top: -120px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(225, 0, 60, 0.55) 0%, transparent 60%);
+}
+.hh-dashboard-hero-blob.two {
+  bottom: -160px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, transparent 60%);
+  animation-delay: -4s;
+}
+@keyframes hh-dashboard-blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(8%, -6%) scale(1.08); }
+  66%      { transform: translate(-6%, 8%) scale(0.95); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh-stat-card,
+  .hh-stat-card:hover,
+  .hh-stat-orb,
+  .hh-stat-shine,
+  .hh-stat-bar,
+  .hh-dashboard-hero-blob {
+    animation: none !important;
+    transition: none !important;
+  }
+  .hh-stat-card:hover .hh-stat-orb,
+  .hh-stat-card:hover .hh-stat-shine {
+    transform: none;
+    left: -120%;
+  }
+  .hh-page-enter,
+  .hh-dash-from-left,
+  .hh-dash-from-right,
+  .animate-slide-in-right {
+    animation: fadeIn 0.28s ease-out both !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   Mobile / responsive helpers
+   ══════════════════════════════════════════════════ */
+
+/* iPhone notch / Android gesture bar — apply to anything fixed to the
+   bottom of the viewport (mobile bottom nav, FAB, etc.). */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+/* The inset never shrinks a gutter: plain CSS outranks Tailwind's layered
+   utilities, so `p-3 pl-safe` used to mean no side padding at all on phones
+   (content touching the screen edge). A shell sets its gutter with
+   .shell-gutter and the inset only adds to it on a notched screen. */
+.pl-safe {
+  padding-left: max(var(--safe-gutter, 0px), env(safe-area-inset-left, 0px));
+}
+.pr-safe {
+  padding-right: max(var(--safe-gutter, 0px), env(safe-area-inset-right, 0px));
+}
+.shell-gutter { --safe-gutter: 0.75rem; }
+@media (min-width: 640px) { .shell-gutter { --safe-gutter: 1rem; } }
+@media (min-width: 768px) { .shell-gutter { --safe-gutter: 1.5rem; } }
+@media (min-width: 1024px) { .shell-gutter { --safe-gutter: 2rem; } }
+
+/* Toasts: bottom right on wide screens; on phones full width above the
+   bottom navigation and clear of the safe area. */
+.toast-stack {
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  width: min(26rem, calc(100vw - 2rem));
+}
+@media (max-width: 1023.98px) {
+  .toast-stack {
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+  }
+}
+
+/* Below-the-fold spacer for shells that mount MobileBottomNav, so the
+   last row of content isn't trapped under it on phones. */
+@media (max-width: 1023.98px) {
+  .has-mobile-nav {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Standard "scrollable table" wrapper. Use INSTEAD of writing
+   `overflow-x-auto rounded-xl border ...` on every page. The negative
+   margin on phones lets the table reach the screen edge so the user
+   can see the cells they're scrolling past. */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-scroll > table {
+  min-width: 100%;
+}
+@media (max-width: 640px) {
+  .table-scroll {
+    margin-inline: -1rem;
+    border-radius: 0;
+  }
+  .table-scroll > table {
+    /* Force a desktop-ish min so the user actually scrolls instead
+       of getting a jammed, illegible 320px-wide table. */
+    min-width: 640px;
+  }
+}
+
+/* ── Touch targets ────────────────────────────────
+   On a phone the dashboard was full of 24-28px controls: "Claim" on a help
+   ticket, the Info/Warning/Urgent selector, "Arxivlə". They are comfortable
+   with a mouse and fiddly with a thumb, and several sat below the 24px floor
+   WCAG 2.5.8 asks for.
+
+   Buttons centre their own content, so a min-height alone keeps every label
+   where it was — verified at 375px: the announcement type buttons went 28px
+   to 40px with the text still centred and no horizontal overflow.
+
+   Inline links inside the scrolling tables are deliberately left alone: they
+   sit in dense rows where forcing 40px would double the row height for every
+   entry. */
+@media (max-width: 640px) {
+  main button,
+  main [role="button"],
+  main input:not([type="checkbox"]):not([type="radio"]),
+  main select {
+    min-height: 40px;
+  }
+}
+
+/* Page-level toolbar (title + search + buttons) that should stack on
+   phones and lay out horizontally on tablets+. Use as a single class
+   replacement for the repetitive
+   `flex flex-wrap items-end justify-between gap-4` pattern when the
+   right side is a row of buttons + a search box. */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+.toolbar > .toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Make modals scrollable on short viewports (phones in landscape, tiny
+   laptops). Use on the modal panel itself.  */
+.modal-panel {
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Touch-target minimum for icon buttons on mobile (Apple HIG: 44px).
+   Apply to buttons that are otherwise just an icon in `p-1.5`. */
+@media (max-width: 640px) {
+  .tap {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Long words (URLs, github links, emails) break the layout on
+   narrow phones. Apply to user-generated text containers. */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ── Settings surface ──────────────────────────────────────────────────────
+   The settings area is deliberately its own visual system. The dashboard is
+   crimson-on-near-black and every colour there competes for attention; here
+   the ground is a cooler slate, the accent is teal, and crimson appears only
+   on destructive controls — so red on this screen always means "this cannot be
+   undone" rather than "this is a button".
+
+   Everything is a token, so the section follows the light/dark switch instead
+   of hard-coding white text that disappeared on a light background.
+   ------------------------------------------------------------------------ */
+html {
+  --set-bg:          #14161a;
+  --set-panel:       #191c22;
+  --set-panel-hover: #1e222a;
+  --set-line:        rgba(255, 255, 255, 0.07);
+  --set-line-strong: rgba(255, 255, 255, 0.13);
+  --set-text:        #eef1f5;
+  --set-text-soft:   #aeb6c2;
+  --set-text-faint:  #7c8593;
+  --set-accent:      #2DD4BF;
+  --set-accent-weak: rgba(45, 212, 191, 0.14);
+  --set-accent-ink:  #06231f;
+  --set-danger:      #FF5C6E;
+  --set-danger-weak: rgba(255, 92, 110, 0.12);
+  --set-warn:        #F0B330;
+  --set-warn-weak:   rgba(240, 179, 48, 0.12);
+}
+
+html.light {
+  --set-bg:          #F4F6F8;
+  --set-panel:       #FFFFFF;
+  --set-panel-hover: #F8FAFB;
+  --set-line:        rgba(15, 23, 42, 0.09);
+  --set-line-strong: rgba(15, 23, 42, 0.16);
+  --set-text:        #10151C;
+  --set-text-soft:   #4A5563;
+  --set-text-faint:  #6B7583;
+  --set-accent:      #0D9488;
+  --set-accent-weak: rgba(13, 148, 136, 0.10);
+  --set-accent-ink:  #FFFFFF;
+  --set-danger:      #C4263A;
+  --set-danger-weak: rgba(196, 38, 58, 0.08);
+  --set-warn:        #A66A00;
+  --set-warn-weak:   rgba(166, 106, 0, 0.10);
+}
+
+/* ── HackOS site + workspace surface ───────────────────────────────────────
+   One token set shared by the public site and the workspace demo. Both are
+   deliberately single-theme: they are a vendor site and a product walkthrough,
+   not the product shell, and committing to one palette means every colour is
+   declared once instead of twice.
+
+   The neutral is warm-biased on purpose — a pure grey reads as unset, and this
+   ground has to sit under long-form reading as comfortably as under a dense
+   table.
+   ------------------------------------------------------------------------ */
+.hs {
+  --hs-bg:        #FBFAF8;
+  --hs-surface:   #FFFFFF;
+  --hs-raised:    #F3F1EC;
+  --hs-deep:      #14181F;
+  --hs-deep-2:    #1C222C;
+
+  --hs-ink:       #14161C;
+  --hs-ink-2:     #4C525E;
+  --hs-ink-3:     #6B7280;
+  --hs-on-deep:   #FBFAF8;
+  --hs-on-deep-2: rgba(251, 250, 248, 0.72);
+  --hs-on-deep-3: rgba(251, 250, 248, 0.52);
+
+  --hs-line:      rgba(20, 22, 28, 0.10);
+  --hs-line-2:    rgba(20, 22, 28, 0.17);
+  --hs-line-deep: rgba(251, 250, 248, 0.14);
+
+  --hs-brand:      #C8102E;
+  --hs-brand-solid: #C8102E;
+
+  /* Subtle overlays. Written as a token because the same "barely there
+     wash" has to be dark on a light page and light on a dark one. */
+  --hs-tint:   rgba(20, 22, 28, 0.05);
+  --hs-tint-2: rgba(20, 22, 28, 0.12);
+  --hs-header-bg: rgba(251, 250, 248, 0.9);
+
+  /* Text that sits on a light chip or button, whichever way the page runs. */
+  --hs-deep-ink: #14161C;
+  /* The one plan card that is painted differently from its neighbours. */
+  --hs-feature-bg:     #14161C;
+  --hs-feature-border: #14161C;
+  --hs-feature-glow:   none;
+  --hs-brand-2:    #A50D26;
+  --hs-brand-weak: rgba(200, 16, 46, 0.07);
+  --hs-brand-lift: #FF6B85;
+
+  --hs-ok:        #0F7B48;
+  --hs-ok-weak:   rgba(15, 123, 72, 0.09);
+  --hs-warn:      #875700;
+  --hs-warn-weak: rgba(135, 87, 0, 0.10);
+  --hs-info:      #1D4ED8;
+  --hs-info-weak: rgba(29, 78, 216, 0.08);
+  --hs-danger:    #B42318;
+  --hs-danger-weak: rgba(180, 35, 24, 0.08);
+
+  --hs-radius:    10px;
+  --hs-radius-sm: 7px;
+
+  background: var(--hs-bg);
+  color: var(--hs-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Night — the public site.
+   ──────────────────────────────────────────────────────────────────
+   The product itself is a dark console and the hero has always been a
+   dark panel floating on a light page; the seam between them was the
+   least convincing thing about the site. This puts the whole marketing
+   surface on the same ground as the thing it is selling.
+
+   Only `.hs-night` moves. The owner console wears plain `.hs` and stays
+   light, so nothing an organiser looks at every day changes here.
+
+   Two brand tokens, on purpose. #E1003C is a fill colour: white on it
+   reaches 4.92:1, which passes, but the same crimson as *text* on the
+   page ground only reaches 4.0:1, which does not. So `--hs-brand` is the
+   lifted red that reads at 5.4-6.3:1 wherever it lands, and
+   `--hs-brand-solid` is what buttons and badges are painted with. A
+   colour written as text is readable by default; you have to ask for the
+   fill deliberately.
+   ══════════════════════════════════════════════════════════════════ */
+.hs-night {
+  --hs-bg:        #0A0B0F;
+  --hs-surface:   #101218;
+  --hs-raised:    #171A21;
+  --hs-deep:      #12141B;
+  --hs-deep-2:    #1A1D26;
+
+  --hs-ink:       #F4F6FA;
+  --hs-ink-2:     #A8B0BE;
+  --hs-ink-3:     #7C8496;
+  --hs-on-deep:   #F4F6FA;
+  --hs-on-deep-2: #A8B0BE;
+  --hs-on-deep-3: #7C8496;
+
+  --hs-line:      rgba(244, 246, 250, 0.09);
+  --hs-line-2:    rgba(244, 246, 250, 0.16);
+  --hs-line-deep: rgba(244, 246, 250, 0.12);
+
+  --hs-brand:       #FF4D6D;
+  --hs-brand-solid: #E1003C;
+  --hs-brand-2:     #B8002F;
+  --hs-brand-weak:  rgba(225, 0, 60, 0.13);
+  --hs-brand-lift:  #FF4D6D;
+
+  /* The second accent. Dark text on it, never white: 11.1:1 against the
+     page ground, 1.8:1 against white. */
+  --hs-accent:      #3DDC97;
+  --hs-accent-weak: rgba(61, 220, 151, 0.12);
+
+  --hs-tint:   rgba(244, 246, 250, 0.06);
+  --hs-tint-2: rgba(244, 246, 250, 0.13);
+  --hs-header-bg: rgba(10, 11, 15, 0.82);
+
+  --hs-deep-ink: #0A0B0F;
+  /* On a dark page the featured card cannot be "the dark one", so it is the
+     lit one instead: a raised surface with a brand edge. */
+  --hs-feature-bg:     #171A21;
+  --hs-feature-border: #E1003C;
+  --hs-feature-glow:   0 0 0 1px rgba(225, 0, 60, 0.25), 0 24px 60px -32px rgba(225, 0, 60, 0.75);
+
+  --hs-ok:        #3DDC97;
+  --hs-ok-weak:   rgba(61, 220, 151, 0.12);
+  --hs-warn:      #F0B429;
+  --hs-warn-weak: rgba(240, 180, 41, 0.13);
+  --hs-info:      #6AA6FF;
+  --hs-info-weak: rgba(106, 166, 255, 0.13);
+  --hs-danger:    #FF6B6B;
+  --hs-danger-weak: rgba(255, 107, 107, 0.13);
+
+  background: var(--hs-bg);
+  color: var(--hs-ink);
+}
+
+/* ── The grid ──────────────────────────────────────────────────────
+   A engineering-drawing ruling, faint enough to sit under text. Applied
+   per section rather than to the page so it can mark out zones instead
+   of becoming wallpaper. */
+.hs-grid {
+  position: relative;
+  isolation: isolate;
+}
+.hs-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, rgba(244, 246, 250, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 246, 250, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  /* Fades out before the section edge so the ruling never collides with
+     the border underneath it. */
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 40%, transparent 100%);
+}
+
+/* ── Lit surfaces ──────────────────────────────────────────────────
+   Cards pick up a brand-tinted edge and a lift under the pointer. Keyboard
+   focus gets the same treatment, so the affordance is not mouse-only. */
+.hs-lit {
+  transition: border-color 180ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+.hs-lit:hover,
+.hs-lit:focus-within {
+  border-color: rgba(225, 0, 60, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(225, 0, 60, 0.12),
+    0 18px 40px -28px rgba(225, 0, 60, 0.65);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-lit:hover,
+  .hs-lit:focus-within {
+    transform: none;
+  }
+}
+
+/* Motion, kept honest: everything below is a transform/opacity move so it
+   composites, and all of it stops when the reader asks for less motion. */
+@keyframes hsRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hsFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes hsScaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hsSlideLeft {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hsShimmer {
+  from { background-position: -420px 0; }
+  to   { background-position: 420px 0; }
+}
+
+.hs-rise      { animation: hsRise .5s cubic-bezier(.22,1,.36,1) both; }
+.hs-fade      { animation: hsFade .4s ease-out both; }
+.hs-scale-in  { animation: hsScaleIn .18s cubic-bezier(.22,1,.36,1) both; }
+.hs-slide-left{ animation: hsSlideLeft .22s cubic-bezier(.22,1,.36,1) both; }
+
+/* Staggered reveal for grids and lists. */
+.hs-stagger > *          { animation: hsRise .5s cubic-bezier(.22,1,.36,1) both; }
+.hs-stagger > *:nth-child(1) { animation-delay: .02s }
+.hs-stagger > *:nth-child(2) { animation-delay: .06s }
+.hs-stagger > *:nth-child(3) { animation-delay: .10s }
+.hs-stagger > *:nth-child(4) { animation-delay: .14s }
+.hs-stagger > *:nth-child(5) { animation-delay: .18s }
+.hs-stagger > *:nth-child(6) { animation-delay: .22s }
+.hs-stagger > *:nth-child(7) { animation-delay: .26s }
+.hs-stagger > *:nth-child(8) { animation-delay: .30s }
+
+.hs-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--hs-tint, rgba(20,22,28,0.05)) 0%,
+    var(--hs-tint-2, rgba(20,22,28,0.09)) 50%,
+    var(--hs-tint, rgba(20,22,28,0.05)) 100%
+  );
+  background-size: 420px 100%;
+  animation: hsShimmer 1.25s linear infinite;
+  border-radius: 6px;
+}
+
+/* Cards lift on hover, but only where a pointer can actually hover. */
+@media (hover: hover) {
+  .hs-lift { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .hs-lift:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -18px rgba(20,22,28,.45); }
+}
+
+.hs-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.hs-scroll-x::-webkit-scrollbar { height: 8px; }
+.hs-scroll-x::-webkit-scrollbar-thumb { background: var(--hs-tint-2, rgba(20,22,28,.18)); border-radius: 999px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-rise, .hs-fade, .hs-scale-in, .hs-slide-left,
+  .hs-stagger > *, .hs-skeleton {
+    animation: none !important;
+  }
+  .hs-lift { transition: none !important; }
+  .hs-lift:hover { transform: none !important; }
+}
+
+/* react-three-fiber measures the element it is mounted into and sizes both the
+   canvas and the drawing buffer from it. Give that element a definite size and
+   it gets both right on the first frame; force the canvas with !important
+   instead and the CSS size changes while the buffer stays at the HTML default,
+   which renders the scene stretched until something triggers a resize. */
+/*
+ * The 3D host. Absolute rather than a percentage chain on purpose: the canvas
+ * is dynamically imported and mounts after its panel, and a height that has to
+ * resolve through several levels of `height: 100%` is not definite when
+ * react-three-fiber takes its first measurement — it falls back to the HTML
+ * default of 300x150 and never recovers. Anchoring to the panel's own box
+ * means the size is already correct on the first pass.
+ */
+.hs-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+ * Pale palette steps, corrected for light mode.
+ *
+ * `text-emerald-300` and friends were chosen against a black card; on a white
+ * one they run between 1.5:1 and 2.5:1. These are the same hues at a step that
+ * reads. Listed rather than swept because the call sites are few and the class
+ * name still says what the colour means.
+ */
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-400 { color: #047857; }
+html.light .text-amber-200,
+html.light .text-amber-300,
+html.light .text-amber-400,
+html.light .text-yellow-300,
+html.light .text-yellow-400 { color: #875700; }
+html.light .text-red-200,
+html.light .text-red-300,
+html.light .text-red-400,
+html.light .text-rose-300 { color: #B42318; }
+html.light .text-blue-300,
+html.light .text-blue-400,
+html.light .text-sky-300,
+html.light .text-cyan-400 { color: #0369A1; }
+html.light .text-purple-300,
+html.light .text-purple-400,
+html.light .text-violet-300,
+html.light .text-indigo-300 { color: #6D28D9; }
+html.light .text-teal-300 { color: #0F766E; }
+
+/* Loading shapes. A shimmer that stops when the reader asks for stillness. */
+.hh-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--app-card-line) 25%,
+    color-mix(in srgb, var(--app-card-line) 55%, transparent) 37%,
+    var(--app-card-line) 63%
+  );
+  background-size: 400% 100%;
+  animation: hh-skeleton-sweep 1.4s ease-in-out infinite;
+}
+@keyframes hh-skeleton-sweep {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hh-skeleton { animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Neutral surface tokens.
+   ──────────────────────────────────────────────────────────────────
+   The product paints itself in two vocabularies: `--hs-*` on the
+   marketing site and owner console, `--app-*` in the event console. A
+   component written against either one is stuck in that half of the
+   product, which is why the good generic table lived on the owner
+   console and every screen in the app hand-rolled its own.
+
+   These names belong to neither. A component that uses them works in
+   both scopes and follows whichever theme it lands in. Defined here for
+   the app, and overridden inside `.hs` / `.hs-night` for the site — the
+   class beats `:root`, so the site keeps its own palette.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --surface:        var(--app-card-a);
+  --surface-raised: var(--app-surface-2);
+  --surface-sunken: var(--app-surface-2);
+  --line:           var(--app-card-line);
+  /* A firmer line than --line. (It was `color-mix(… 180%, transparent)`:
+     over 100% is invalid, so every border using it fell back to the text
+     colour and every fill — the off switch track — to transparent.) */
+  --line-strong:    color-mix(in srgb, var(--app-card-line), var(--app-heading) 10%);
+  --ink:            var(--app-heading);
+  --ink-2:          var(--app-muted);
+  --ink-3:          var(--app-muted-2);
+  --accent:         var(--app-brand-text, #E1003C);
+  --accent-weak:    rgba(225, 0, 60, 0.13);
+  --radius:         12px;
+  --radius-sm:      8px;
+
+  /* Status and fills. The weak variants are derived rather than listed, so a
+     theme that darkens a status colour gets a matching wash for free. */
+  --accent-solid:   #E1003C;
+  --ok:             var(--app-ok);
+  --warn:           var(--app-warn);
+  --danger:         var(--app-danger);
+  --info:           var(--app-sky);
+  --ok-weak:        color-mix(in srgb, var(--ok) 14%, transparent);
+  --warn-weak:      color-mix(in srgb, var(--warn) 14%, transparent);
+  --danger-weak:    color-mix(in srgb, var(--danger) 14%, transparent);
+  --info-weak:      color-mix(in srgb, var(--info) 14%, transparent);
+  --tint:           color-mix(in srgb, var(--ink) 6%, transparent);
+  /* A panel painted opposite to the page. */
+  --inverse:        var(--app-surface-2);
+  --on-inverse:     var(--app-heading);
+  --on-inverse-2:   var(--app-muted);
+}
+
+.hs {
+  --surface:        var(--hs-surface);
+  --surface-raised: var(--hs-raised);
+  --surface-sunken: var(--hs-bg);
+  --line:           var(--hs-line);
+  --line-strong:    var(--hs-line-2);
+  --ink:            var(--hs-ink);
+  --ink-2:          var(--hs-ink-2);
+  --ink-3:          var(--hs-ink-3);
+  --accent:         var(--hs-brand);
+  --accent-weak:    var(--hs-brand-weak);
+  --radius:         var(--hs-radius);
+  --radius-sm:      var(--hs-radius-sm);
+
+  --accent-solid:   var(--hs-brand-solid);
+  --ok:             var(--hs-ok);
+  --warn:           var(--hs-warn);
+  --danger:         var(--hs-danger);
+  --info:           var(--hs-info);
+  --ok-weak:        var(--hs-ok-weak);
+  --warn-weak:      var(--hs-warn-weak);
+  --danger-weak:    var(--hs-danger-weak);
+  --info-weak:      var(--hs-info-weak);
+  --tint:           var(--hs-tint);
+  --inverse:        var(--hs-deep);
+  --on-inverse:     var(--hs-on-deep);
+  --on-inverse-2:   var(--hs-on-deep-2);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   The owner console, light and dark.
+   ──────────────────────────────────────────────────────────────────
+   The console follows the platform theme (`hh_theme`, the same switch
+   as the organiser dashboard): `.hs-console` alone is light, with
+   `.hs-night` it wears the night palette above. Every console colour is
+   a token, so nothing here repeats a hex for one mode.
+
+   Two fills need their own token because white text sits on them:
+   `--danger-solid` (the night danger is a light red, readable as text,
+   2.8:1 under white) — #D92D20 keeps white at 4.8:1.
+
+   Chart series are the validated categorical slots, stepped separately
+   for each surface (light #2a78d6…, dark #3987e5…), never flipped.
+   ══════════════════════════════════════════════════════════════════ */
+:root { --danger-solid: var(--danger); }
+.hs {
+  --hs-danger-solid: #B42318;
+  --danger-solid:    var(--hs-danger-solid);
+  --viz-1: #2a78d6; --viz-2: #eb6834; --viz-3: #1baf7a; --viz-4: #eda100;
+  --viz-5: #e87ba4; --viz-6: #008300; --viz-7: #6250d6; --viz-8: #e34948;
+  --viz-grid:   rgba(20, 22, 28, 0.08);
+  --viz-cursor: rgba(20, 22, 28, 0.04);
+  --scrim:      rgba(12, 14, 18, 0.45);
+}
+.hs-night {
+  --hs-danger-solid: #D92D20;
+  --viz-1: #3987e5; --viz-2: #d95926; --viz-3: #199e70; --viz-4: #c98500;
+  --viz-5: #d55181; --viz-6: #008300; --viz-7: #9085e9; --viz-8: #e66767;
+  --viz-grid:   rgba(244, 246, 250, 0.08);
+  --viz-cursor: rgba(244, 246, 250, 0.05);
+  --scrim:      rgba(0, 0, 0, 0.6);
+}
+.hs-console { color-scheme: light; }
+.hs-console.hs-night { color-scheme: dark; }
+/* The console's own surfaces where a class, not a style, paints them. */
+.hs-console .hs-row-hover:hover { background: var(--hs-tint); }
+
+/* ══════════════════════════════════════════════════════════════════
+   Keyboard focus.
+   ──────────────────────────────────────────────────────────────────
+   Measured before this existed: of the interactive elements sampled in
+   the console, none had a visible focus indicator — outline: none and
+   no ring. Somebody navigating by keyboard had no way to tell what was
+   selected, on any screen.
+
+   `:focus-visible` rather than `:focus`, so a mouse click does not
+   leave a ring behind; the accent colour so it reads on either theme;
+   and an offset so it sits outside the control rather than on top of
+   its own border.
+   ══════════════════════════════════════════════════════════════════ */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: #E1003C;
+  outline-color: var(--accent, #E1003C);
+  outline-offset: 2px;
+}
+
+/* Controls that sit flush against an edge would clip the ring outside
+   themselves; pull it inward instead of letting it disappear. */
+:where(td, th) :where(button, a):focus-visible {
+  outline-offset: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Marketing site — layout primitives (light by default, `.hs-night`
+   for the dark theme). Typography, rhythm and motion for the public
+   pages: a floating pill header, a two-tone display headline, mono
+   chapter markers, numbered columns with hairline dividers.
+   ══════════════════════════════════════════════════════════════════ */
+.hs-site {
+  --hs-bg:      #F8F9FB;
+  --hs-raised:  #F1F3F7;
+  --hs-ink-2:   #4B5565;
+  --hs-ink-3:   #646C79; /* 4.8:1 on --hs-raised (table heads, legal facts) */
+  --hs-ink-mute:#5E6878;
+  --hs-header-bg: rgba(255, 255, 255, 0.72);
+  /* Pages written for the earlier display face keep working. */
+  --font-display: var(--font-site);
+  min-height: 100vh;
+  font-family: var(--font-site), "Inter", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.hs-site.hs-night {
+  --hs-bg:      #08090C;
+  --hs-raised:  #11131A;
+  /* .hs-site sets the light greys above and comes later than .hs-night, so
+     the dark ones are restated here (else 2.6:1 on the dark ground). */
+  --hs-ink-2:   #A8B0BE;
+  --hs-ink-3:   #7C8496;
+  --hs-ink-mute:#8A93A3;
+  --hs-header-bg: rgba(16, 18, 24, 0.72);
+}
+
+/* Display type */
+.hs-display {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  color: var(--hs-ink);
+}
+.hs-h1 { font-size: clamp(44px, 7.6vw, 104px); }
+.hs-h2 { font-size: clamp(34px, 4.6vw, 60px); line-height: 1.04; letter-spacing: -0.04em; }
+.hs-h3 { font-size: clamp(20px, 1.6vw, 24px); letter-spacing: -0.02em; line-height: 1.2; font-weight: 600; }
+.hs-mute { color: var(--hs-ink-mute); }
+.hs-lead-lg { font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; color: var(--hs-ink-2); }
+
+/* Mono chapter marker:  ── WHAT HACKOS IS */
+.hs-chapter {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono-ui), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hs-brand);
+}
+.hs-chapter::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+}
+.hs-mono {
+  font-family: var(--font-mono-ui), ui-monospace, monospace;
+  letter-spacing: 0.06em;
+}
+
+/* Pill buttons */
+.hs-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform .2s cubic-bezier(.22,1,.36,1), background-color .2s, border-color .2s, box-shadow .2s;
+}
+.hs-pill:hover { transform: translateY(-1px); }
+.hs-pill:focus-visible { outline: 2px solid var(--hs-brand); outline-offset: 3px; }
+.hs-pill-primary {
+  background: var(--hs-brand-solid);
+  color: #fff;
+  box-shadow: 0 10px 30px -12px rgba(200, 16, 46, 0.55);
+}
+.hs-pill-primary:hover { background: var(--hs-brand-2); }
+.hs-pill-ghost {
+  border: 1px solid var(--hs-line-2);
+  background: var(--hs-surface);
+  color: var(--hs-ink);
+}
+.hs-pill-ghost:hover { border-color: var(--hs-ink-3); }
+
+/* Hairline-divided column rows (numbered steps, stats) */
+.hs-cols {
+  display: grid;
+  border-top: 1px solid var(--hs-line);
+}
+.hs-cols > * {
+  padding: 36px 28px 40px 0;
+}
+@media (min-width: 768px) {
+  .hs-cols > * + * { border-left: 1px solid var(--hs-line); padding-left: 32px; }
+  .hs-cols.hs-cols-wrap > * { border-left: 0; padding-left: 0; }
+  .hs-cols.hs-cols-wrap > *:not(:nth-child(3n + 1)) { border-left: 1px solid var(--hs-line); padding-left: 32px; }
+  .hs-cols.hs-cols-wrap > *:nth-child(n + 4) { border-top: 1px solid var(--hs-line); }
+}
+@media (max-width: 767px) {
+  .hs-cols > * + * { border-top: 1px solid var(--hs-line); }
+}
+
+/* Soft card */
+.hs-card {
+  border: 1px solid var(--hs-line);
+  border-radius: 24px;
+  background: var(--hs-surface);
+}
+
+/* Scroll cue under the hero */
+.hs-scroll-cue {
+  width: 22px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1.5px solid var(--hs-line-2);
+  position: relative;
+}
+.hs-scroll-cue::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--hs-brand);
+  animation: hsCue 1.8s cubic-bezier(.22,1,.36,1) infinite;
+}
+@keyframes hsCue {
+  0%   { transform: translateY(0); opacity: 1; }
+  70%  { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+/* Reveal on scroll. Content is visible without JS; the hidden state only
+   applies once the page has hydrated (`.hs-js` on the site root). */
+.hs-js .hs-reveal:not(.is-in) {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.hs-reveal {
+  transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+}
+
+/* Soft brand glow behind the hero headline */
+.hs-hero-glow {
+  position: absolute;
+  inset: -10% 0 auto 0;
+  height: 70vh;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 50% 30%, rgba(200, 16, 46, 0.10), transparent 70%),
+    radial-gradient(30% 40% at 70% 10%, rgba(200, 16, 46, 0.06), transparent 70%);
+}
+.hs-night .hs-hero-glow {
+  background:
+    radial-gradient(40% 50% at 50% 30%, rgba(225, 0, 60, 0.20), transparent 70%),
+    radial-gradient(30% 40% at 70% 10%, rgba(225, 0, 60, 0.10), transparent 70%);
+}
+
+/* Infinite marquee */
+.hs-marquee { display: flex; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.hs-marquee > ul { animation: hsMarquee 38s linear infinite; }
+@keyframes hsMarquee { to { transform: translateX(-100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-js .hs-reveal:not(.is-in) { opacity: 1; transform: none; }
+  .hs-reveal, .hs-pill { transition: none; }
+  .hs-scroll-cue::after, .hs-marquee > ul { animation: none; }
+}
+
+/* Partner logos on the home page: their own colours by day, white at night. */
+.hs-partner-logo { display: block; }
+.hs-night .hs-partner-logo { filter: brightness(0) invert(1); opacity: 0.9; }

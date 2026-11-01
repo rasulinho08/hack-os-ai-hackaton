@@ -1,0 +1,48 @@
+-- Operational notes: duplicate scoring_criteria rows (same event, same rubric name)
+--
+-- Context:
+--   scores.criterion_id REFERENCES scoring_criteria(id) ON DELETE CASCADE
+--   Deleting a criterion row removes all scores tied to that criterion_id.
+--
+-- Before deleting duplicates you must either:
+--   (A) Merge scores onto one surviving criterion_id (UPDATE scores SET criterion_id = ...),
+--   (B) Accept loss of scores on removed duplicate ids, or
+--   (C) Prefer fixing via API: PUT /api/events/:eventId/judging/criteria with the full
+--       desired rubric (replaceCriteriaForEvent wipes and re-inserts for that event).
+--
+-- 1) Inspect duplicates for one event:
+--    SELECT event_id, name, COUNT(*) AS n, ARRAY_AGG(id ORDER BY id) AS ids
+--    FROM scoring_criteria
+--    WHERE event_id = <EVENT_ID>
+--    GROUP BY event_id, name
+--    HAVING COUNT(*) > 1;
+--
+-- 2) Example: repoint scores from duplicate criterion ids to the smallest id per name
+--    (run only after verifying ids; adjust survivor_id logic as needed):
+--
+--    WITH d AS (
+--      SELECT event_id, name, MIN(id) AS keep_id, ARRAY_AGG(id ORDER BY id) AS all_ids
+--      FROM scoring_criteria
+--      WHERE event_id = <EVENT_ID>
+--      GROUP BY event_id, name
+--      HAVING COUNT(*) > 1
+--    )
+--    UPDATE scores s
+--    SET criterion_id = d.keep_id
+--    FROM d
+--    WHERE s.criterion_id = ANY(d.all_ids)
+--      AND s.criterion_id <> d.keep_id;
+--
+--    Then DELETE duplicate rows (keeps MIN(id) per name):
+--    DELETE FROM scoring_criteria sc
+--    USING (
+--      SELECT event_id, name, MIN(id) AS keep_id
+--      FROM scoring_criteria
+--      WHERE event_id = <EVENT_ID>
+--      GROUP BY event_id, name
+--    ) k
+--    WHERE sc.event_id = k.event_id
+--      AND sc.name = k.name
+--      AND sc.id <> k.keep_id;
+--
+-- Use transactions (BEGIN ... COMMIT) and always backup before destructive changes.

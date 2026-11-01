@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HackOS">
+  <title>HackOS</title>
+  <!--
+    The HackOS mark.
+
+    A geometric H — the initial — whose right leg stops short and continues
+    as a cursor block: the letter is still being typed. It carries the
+    command-centre idea without borrowing the generic ">_" every developer
+    tool uses, and it is built from four rectangles so it survives a 16 px
+    favicon. One flat fill, the product's own brand crimson, so the mark and
+    the interface never disagree about what colour HackOS is.
+
+    Spacing is on a 64-unit grid: 15 units of margin, 10-unit stems, a
+    6-unit crossbar, and a 6-unit gap before the 8-unit cursor.
+  -->
+  <rect width="64" height="64" rx="14" fill="#E1003C"/>
+  <rect x="15" y="15" width="10" height="34" rx="2" fill="#FFFFFF"/>
+  <rect x="25" y="29" width="14" height="6" fill="#FFFFFF"/>
+  <rect x="39" y="15" width="10" height="20" rx="2" fill="#FFFFFF"/>
+  <rect x="39" y="41" width="10" height="8" rx="2" fill="#FFFFFF"/>
+</svg>

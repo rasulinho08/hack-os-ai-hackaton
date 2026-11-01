@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.git
+.env*
+!.env.example
+*.log
+build.log
+build2.log
+.gemini_lint_report.txt
+.cursor
+docs
