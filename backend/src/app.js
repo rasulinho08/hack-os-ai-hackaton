@@ -124,6 +124,7 @@ app.use('/api/owner', require('./routes/owner.routes'));
 app.use('/api/mentor/me', mentorSelfRoutes);
 app.use('/api/judge/me', judgeSelfRoutes);
 app.use('/api/setup', require('./routes/setup.routes'));
+app.use('/api/ai', require('./routes/ai.routes'));
 // Signed-in only: the plan and limits of a customer's event are not public.
 app.get('/api/events/:eventId/modules', authMw, eventExists, eventAccess, require('./controllers/orderActions.controller').eventModules);
 app.use('/api/events/:eventId/builder', eventExists, eventAccess, require('./routes/builder.routes'));

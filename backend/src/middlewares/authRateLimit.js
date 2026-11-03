@@ -15,6 +15,7 @@
  *   EXPORT_RATE_LIMIT_WINDOW_MS (default 10 min)   EXPORT_RATE_LIMIT_MAX (default 30)
  *   QUOTE_RATE_LIMIT_WINDOW_MS  (default 15 min)   QUOTE_RATE_LIMIT_MAX  (default 100 unknown codes)
  *   INVITE_RATE_LIMIT_WINDOW_MS (default 10 min)   INVITE_RATE_LIMIT_MAX (default 60)
+ *   AI_RATE_LIMIT_WINDOW_MS     (default 1 h)      AI_RATE_LIMIT_MAX     (default 20)
  */
 
 const rl = require('express-rate-limit');
@@ -206,4 +207,21 @@ const inviteLimiter = rateLimit({
   },
 });
 
-module.exports = { authLimiter, globalLimiter, uploadLimiter, registerLimiter, lookupLimiter, exportLimiter, quoteLimiter, inviteLimiter };
+const AI_WINDOW_MS = intFromEnv('AI_RATE_LIMIT_WINDOW_MS', 60 * 60 * 1000);
+const AI_MAX       = intFromEnv('AI_RATE_LIMIT_MAX', 20);
+
+/* Calls to the AI model per account: each one spends the platform's credits. */
+const aiLimiter = rateLimit({
+  windowMs: AI_WINDOW_MS,
+  limit: AI_MAX,
+  keyGenerator: (req) => `ai:${userKey(req) || `ip:${ipKeyGenerator(req.ip || '', 64)}`}`,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many AI requests. Please wait a while and try again.',
+    code: 'RATE_LIMITED',
+  },
+});
+
+module.exports = { authLimiter, globalLimiter, uploadLimiter, registerLimiter, lookupLimiter, exportLimiter, quoteLimiter, inviteLimiter, aiLimiter };
