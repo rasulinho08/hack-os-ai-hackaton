@@ -25,4 +25,4 @@ render.yaml Render blueprint for the API (rootDir: backend)
 
 ## Running locally
 
-See `backend/README.md` and `frontend/README.md`.
+See `backend/README.md` and `frontend/README.md`. Deploying (Supabase, Render, Vercel): `DEPLOY.md`.
