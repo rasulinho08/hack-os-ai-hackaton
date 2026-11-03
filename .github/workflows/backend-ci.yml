@@ -58,6 +58,8 @@ jobs:
       TELEGRAM_BOT_TOKEN: "123456:ci-token"
       TELEGRAM_API_BASE: http://127.0.0.1:5099
       TELEGRAM_WEBHOOK_SECRET: ci-webhook-secret
+      MODEL_API_KEY: ci-fake-key
+      META_AI_BASE_URL: http://127.0.0.1:5097
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -71,12 +73,13 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
       - name: Lint
         run: npm run lint
-      - name: Encryption key and the fake mail, Telegram and GitHub servers
+      - name: Encryption key and the fake mail, Telegram, GitHub and Meta AI servers
         run: |
           echo "DATA_ENCRYPTION_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")" >> "$GITHUB_ENV"
           node tests/fakeSmtp.js 2525 > fake-smtp.log 2>&1 &
           node tests/fakeTelegram.js 5099 > fake-telegram.log 2>&1 &
           node tests/fakeGithub.js 5098 > fake-github.log 2>&1 &
+          node tests/fakeMetaAi.js 5097 > fake-meta-ai.log 2>&1 &
       - name: Start the API (it runs the migrations)
         run: |
           node server.js > api.log 2>&1 &
